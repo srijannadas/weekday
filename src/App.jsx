@@ -17,15 +17,19 @@ function App() {
 
   const [allJobs, setAllJobs] = useState([]);
   const [filters, setFilters] = useState(defaultFilters);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     // Fetch all job listings initially
     axios.post('https://api.weekday.technology/adhoc/getSampleJdJSON')
       .then(response => {
         setAllJobs(response.data.jdList);
+        setLoading(false);
       })
       .catch(error => {
         console.error('Error fetching job data:', error);
+        setLoading(false);
       });
   }, []);
 
@@ -36,7 +40,12 @@ function App() {
     <>
     <h3>Welcome to Weekday</h3>
     <Filters onFilterChange={handleFilterChange} />
-      <Cards filters={filters} allJobs={allJobs} />
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <Cards filters={filters} allJobs={allJobs} />
+      )}
     </>
   )
 }
