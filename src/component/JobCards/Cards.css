@@ -159,5 +159,7 @@
   justify-content: space-around;
 }
 .apply-btn {
+  position: relative;
   margin-top: 20px;
+  z-index: 2;
 }
