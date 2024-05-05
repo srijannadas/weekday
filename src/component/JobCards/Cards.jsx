@@ -1,68 +1,86 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import Card from './Card';
+// JobCards/Cards.jsx
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Card from "./Card";
 
-const Cards = () => {
+const Cards = ({ filters }) => {
   const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [reachedEnd, setReachedEnd] = useState(false);
-  const observer = useRef();
 
   useEffect(() => {
-    setLoading(true);
-    fetchJobs();
+    // Fetch job listings based on filters
+    axios
+      .post("https://api.weekday.technology/adhoc/getSampleJdJSON")
+      .then((response) => {
+        // Apply filters
+        let filteredJobs = response.data.jdList.filter((job) => {
+          // Filter by minimum experience
+          if (
+            filters.minExperience &&
+            (job.minExp < filters.minExperience ||
+              job.maxExp < filters.minExperience)
+          ) {
+            return false;
+          }
+          // Filter by company name
+          if (
+            filters.companyName &&
+            !job.companyName
+              .toLowerCase()
+              .includes(filters.companyName.toLowerCase())
+          ) {
+            return false;
+          }
+          // Filter by location
+          if (
+            filters.location &&
+            !job.location.toLowerCase().includes(filters.location.toLowerCase())
+          ) {
+            return false;
+          }
+          // Filter by remote/on-site
+          if (filters.remote && job.location.toLowerCase().includes("remote")) {
+            return false;
+          }
+          // Filter by tech stack
+          if (
+            filters.techStack &&
+            !job.jobDetailsFromCompany
+              .toLowerCase()
+              .includes(filters.techStack.toLowerCase())
+          ) {
+            return false;
+          }
+          // Filter by role
+          if (
+            filters.role &&
+            !job.jobRole.toLowerCase().includes(filters.role.toLowerCase())
+          ) {
+            return false;
+          }
+          // Filter by minimum base pay
+          if (
+            filters.minBasePay &&
+            job.minJdSalary &&
+            job.minJdSalary < filters.minBasePay
+          ) {
+            return false;
+          }
 
-    setupIntersectionObserver(); // Setup intersection observer for infinite scroll
+          return true; // Include job if it passes all filters
+        });
 
-    return () => {
-      // Clean up the intersection observer when the component unmounts or is updated
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-    };
-  }, [page]);
-
-  const setupIntersectionObserver = () => {
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        setPage(prevPage => prevPage + 1);
-      }
-    });
-
-    observer.current.observe(document.querySelector('.observer-element'));
-  };
-
-  const fetchJobs = () => {
-    axios.post('https://api.weekday.technology/adhoc/getSampleJdJSON', { page })
-      .then(response => {
-        const newJobs = response.data.jdList;
-  
-        if (page === 1) {
-          setJobs(newJobs); // Replace existing jobs with new jobs
-        } else {
-          setJobs(prevJobs => [...prevJobs, ...newJobs]);
-        }
-  
-        if (newJobs.length === 0) {
-          setReachedEnd(true); // Indicate that end of results is reached
-        }
-  
-        setLoading(false);
+        setJobs(filteredJobs);
       })
-      .catch(error => {
-        console.error('Error fetching job data:', error);
-        setLoading(false);
+      .catch((error) => {
+        console.error("Error fetching job data:", error);
       });
-  };
+  }, [filters]); // Update job listings when filters change
 
   return (
     <div className="cards-container">
-      {jobs.map(job => (
+      {jobs.map((job) => (
         <Card key={job.jdUid} job={job} />
       ))}
-      <div className="observer-element" style={{ height: '10px' }} />
-      {loading && <p>Loading...</p>}
     </div>
   );
 };
