@@ -1,49 +1,51 @@
-
+/* Filters.css */
 .filters-container {
+    padding: 20px;
+    border: 1px solid #eaeaea;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .filter-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
-    padding: 40px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ffa200;
   }
   
   .filter-input {
-    margin-bottom: 20px;
-    flex-basis: calc(33.333% - 20px); /* 33.333% width with some spacing */
-    position: relative; /* Required for absolute positioning */
+    flex: 1;
+    margin-right: 40px;
   }
   
-  .filter-input input[type="text"] {
-    width: calc(100% - 10px); /* 100% width with some spacing */
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+  .filter-input input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     font-size: 16px;
   }
   
-  .filter-input input[type="checkbox"] {
-    width: auto;
-    margin-left: 10px;
+  .filter-input input::placeholder {
+    color: #999;
   }
-  
-  .filter-input button {
-    position: absolute;
-    left: 160%;
-    transform: translateX(-50%);
-    width: 100%; /* Button takes full width */
-    padding: 12px 24px;
-    border: none;
-    background-color: #f9b234;
-    color: #000;
-    border-radius: 8px;
-    cursor: pointer;
+  .filter-input select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
     font-size: 16px;
-    transition: background-color 0.3s ease;
   }
   
-  .filter-input button:hover {
-    background-color: #ffa200;
+  .filter-input select option {
+    padding: 10px;
   }
   
+  .filter-input select::placeholder {
+    color: #999;
+  }
+  
+  /* Adjust spacing between filters */
+  .filter-input:not(:last-child) {
+    margin-bottom: 10px;
+  }
