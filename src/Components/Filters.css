@@ -1,0 +1,30 @@
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center; /* Align items vertically */
+  gap: 1em;
+  padding: 20px;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.custom-multiselect {
+  /* Adjust the size of the Multiselect component */
+  width: 190px; /* Example width */
+}
+
+.filter-item label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.filter-item select {
+  padding: 0;
+}
+
+.filter-item input[type="text"] {
+  padding: 10px;
+}

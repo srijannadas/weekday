@@ -1,0 +1,13 @@
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffa2003c;
+}
+.header-container .logo {
+  margin: 20px;
+}
+.header-container .logo img {
+  width: 200px;
+  margin-left: 20px;
+}
